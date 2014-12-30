@@ -2,14 +2,29 @@
 extends layout
 
 block content
-    ul#messages
-    form(action="")
-        input#m(autocomplete="off")
-        button Send
+    div.navbar.navbar-inverse.navbar-fixed-top
+        .navbar-inner
+            .container
+                a.navbar-brand(href="/") chat-example
+                ul.nav.navbar-nav
+                    li: a Room name #{roomName}
+                    li: a(href="/") Return to top
+    #main-contents.container
+        .row
+            .span4
+                h3: span#userName #{userName}
+                form(action="")
+                    textarea#m.span4(rows="5", cols="50", placeholder="Input message")
+                    button.btn.btn-default(type="submit") Send
+
+            .span8
+                ul#messages
     script(type="text/javascript", src="/socket.io/socket.io.js")
     script(type="text/javascript", src="/js/jquery-2.1.1.min.js")
     script(type="text/javascript", src="/js/chat.js")
     script.
-        var user = {
-            name: '#{user}'
+        var chatinfo = {
+            roomName: '#{roomName}',
+            userName: '#{userName}',
+            password: '#{password}'
         };

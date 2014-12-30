@@ -2,6 +2,23 @@
 extends layout
 
 block content
-    form(action="room", method="post")
-        input(name="user", autocomplete="off")
-        button Login
+    .container
+        .row
+            .span6
+                form.form-horizontal(action="room", method="post")
+                    .control-group
+                        label.control-label(for="roomName") Room name
+                        .controls
+                            input#roomName(type="text", name="roomName", placeholder="Input room name")
+                    .control-group
+                        label.control-label(for="userName") User name
+                        .controls
+                            input#userName(type="text", name="userName", placeholder="Input user name")
+                    .control-group
+                        label.control-label(for="password") Password
+                        .controls
+                            input#password(type="password", name="password", placeholder="Input password")
+                    .control-group
+                        button.btn(type="submit") Login
+    script(type="text/javascript", src="/js/jquery-2.1.1.min.js")
+    script(type="text/javascript", src="/js/bootstrap.min.js")

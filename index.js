@@ -15,30 +15,29 @@ app.get('/', function(req, res) {
     res.render('login');
 });
 
-// roomへのPOST通信
 app.post('/room', function(req, res) {
-	res.render('index', {user: req.body.user});
+	res.render('index', {roomName: req.body.roomName, userName: req.body.userName, password: req.body.password});
 });
 
 io.on('connection', function(socket) {
 	socket.emit('connected', {});
 
-	socket.on('user login', function(user) {
-		io.emit('chat message', user.name + ' logged-in');
+	socket.on('user login', function(chatinfo) {
+		io.emit('chat message', chatinfo.userName + ' logged-in');
 	    socket.on('disconnect', function() {
-	    	io.emit('chat message', user.name + ' logged-out');
+	    	io.emit('chat message', chatinfo.userName + ' logged-out');
 	    });
 
 	    socket.on('chat message', function(msg) {
-	        io.emit('chat message', user.name + ': ' + msg);
+	        io.emit('chat message', chatinfo.userName + ': ' + msg);
 	    });
 
 	    socket.on('start typing', function(data) {
-	    	io.emit('chat message', user.name + ' is typing');
+	    	io.emit('chat message', chatinfo.userName + ' is typing');
 	    });
 
 	    socket.on('cancel typing', function(data) {
-	    	io.emit('cancel typing', user.name + ' is typing');
+	    	io.emit('cancel typing', chatinfo.userName + ' is typing');
 	    });
 	});
 });

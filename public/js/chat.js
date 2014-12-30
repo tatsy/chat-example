@@ -12,7 +12,7 @@ socket.on('chat message', function(msg) {
 });
 
 socket.on('connected', function(data) {
-	socket.emit('user login', user);
+	socket.emit('user login', chatinfo);
 });
 
 socket.on('cancel typing', function(msg) {
