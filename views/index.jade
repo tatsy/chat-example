@@ -1,30 +1,29 @@
-// index.jade
 extends layout
 
 block content
-    div.navbar.navbar-inverse.navbar-fixed-top
-        .navbar-inner
-            .container
-                a.navbar-brand(href="/") chat-example
-                ul.nav.navbar-nav
-                    li: a Room name #{roomName}
-                    li: a(href="/") Return to top
-    #main-contents.container
-        .row
-            .span4
-                h3: span#userName #{userName}
-                form(action="")
-                    textarea#m.span4(rows="5", cols="50", placeholder="Input message")
-                    button.btn.btn-default(type="submit") Send
-
-            .span8
-                ul#messages
     script(type="text/javascript", src="/socket.io/socket.io.js")
-    script(type="text/javascript", src="/js/jquery-2.1.1.min.js")
     script(type="text/javascript", src="/js/chat.js")
     script.
-        var chatinfo = {
-            roomName: '#{roomName}',
-            userName: '#{userName}',
-            password: '#{password}'
+        var data = {
+            user: '#{userName}'
         };
+    
+    .container
+        nav.navbar.navbar-default
+            .container-fluid
+                .navbar-header
+                    button.navbar-toggle.collapse(type="button", data-toggle="collapse", data-target="#navbar", aria-expanded="false", aria-controls="navbar")
+                        span.sr-only Toggle navigation
+                        span.icon-bar
+                        span.icon-bar
+                        span.icon-bar
+                    a.navbar-brand(href="#") user name: #{userName}
+                .collapse.navbar-collapse
+                    form#msg-form.navbar-form.navbar-left
+                        .form-group
+                            input#m.form-control(type="text", cols="50", placeholder="Input message")
+                        button#post.btn.btn-default(type="button" onclick="postMessage();") Send
+                                    
+    .container
+        .row
+            ul#messages

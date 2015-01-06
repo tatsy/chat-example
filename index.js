@@ -1,4 +1,3 @@
-// index.js
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
@@ -16,28 +15,28 @@ app.get('/', function(req, res) {
 });
 
 app.post('/room', function(req, res) {
-	res.render('index', {roomName: req.body.roomName, userName: req.body.userName, password: req.body.password});
+	res.render('index', { userName: req.body.userName });
 });
 
 io.on('connection', function(socket) {
 	socket.emit('connected', {});
 
-	socket.on('user login', function(chatinfo) {
-		io.emit('chat message', chatinfo.userName + ' logged-in');
+	socket.on('user login', function(data) {
+		io.emit('chat message', { who: 'System', message: data.user + ' entered' });
 	    socket.on('disconnect', function() {
-	    	io.emit('chat message', chatinfo.userName + ' logged-out');
+	    	io.emit('chat message', { who: 'System', message: data.user + ' exited' });
 	    });
 
 	    socket.on('chat message', function(msg) {
-	        io.emit('chat message', chatinfo.userName + ': ' + msg);
+	        io.emit('chat message', { who: data.user, message: msg });
 	    });
 
-	    socket.on('start typing', function(data) {
-	    	io.emit('chat message', chatinfo.userName + ' is typing');
+	    socket.on('start typing', function() {
+	    	io.emit('chat message', { message: data.user + ' is typing' });
 	    });
 
-	    socket.on('cancel typing', function(data) {
-	    	io.emit('cancel typing', chatinfo.userName + ' is typing');
+	    socket.on('cancel typing', function() {
+	    	io.emit('cancel typing', data.user + ' is typing');
 	    });
 	});
 });

@@ -1,35 +1,49 @@
-var socket = io();
-var isType = false;
+function decoMessage(data) {
+    var msg = "";
+    if(data.who !== undefined) {
+        msg += '<span class="who">' + data.who + '</span>: ';
+    }
+    msg += data.message;
+    return msg;
+}
 
-$('form').submit(function() {
-    socket.emit('chat message', $('#m').val());
-    $('#m').val('');
-    return false;
-});
+$(document).ready(function() {
+    var socket = io();
+    var isType = false;
 
-socket.on('chat message', function(msg) {
-    $('#messages').append($('<li>').text(msg));
-});
+    $('#msg-form').submit(function() {
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        isType = false;
+        socket.emit('cancel typing', {});
+        return false;
+    });
 
-socket.on('connected', function(data) {
-	socket.emit('user login', chatinfo);
-});
+    socket.on('chat message', function(data) {
+        $('#messages').append($('<li>').html(decoMessage(data)));
+    });
 
-socket.on('cancel typing', function(msg) {
-	$('#messages > li').each(function() {
-		if($(this).text() == msg) {
-			$(this).remove();
-			return;
-		}
-	});
-});
+    socket.on('connected', function() {
+    	socket.emit('user login', data);
+    });
 
-$('#m').keyup(function() {
-	if($('#m').val() == '') {
-		isType = false;
-		socket.emit('cancel typing', {});
-	} else if(!isType) {
-		isType = true;
-		socket.emit('start typing', {});
-	}
+    socket.on('cancel typing', function(msg) {
+    	$('#messages > li').each(function() {
+            console.log($(this).text());
+    		if($(this).text() == msg) {
+    			$(this).remove();
+    			return;
+    		}
+    	});
+    });
+
+    $('#m').keyup(function() {
+    	if($('#m').val() == '') {
+    		isType = false;
+    		socket.emit('cancel typing', {});
+    	} else if(!isType) {
+    		isType = true;
+    		socket.emit('start typing', {});
+    	}
+    });
 });
